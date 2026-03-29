@@ -24,34 +24,31 @@ APEX-BRIEFING/
 ├── index.html              (HTML structure — built by ChatGPT)
 ├── style.css               (All styling — built by ChatGPT)
 ├── script.js               (Timeline logic — built by ChatGPT)
-|assets/
-├── video/
-│   ├── scene1-intro.mp4          (5s)
-│   ├── scene2-challenge.mp4      (5s)
-│   ├── scene3-solution.mp4       (5s)
-│   ├── scene4-drone.mp4          (6s)
-│   ├── scene5-command.mp4        (5s)
-│   ├── scene6-coverage.mp4       (5s)
-│   ├── scene7-detection.mp4      (5s)
-│   ├── scene8-scalable.mp4       (5s)
-│   └── scene9-closing.mp4        (7s)
-├── audio/
-│   └── music.mp3                 (your existing track, ~65-70s)
-└── img/
-    ├── tfp-logo.png
-    ├── apex-logo.png
-    └── apex-connex.png           (if still using it)
+├── assets/
+│   ├── video/
+│   │   ├── scene1-intro.mp4          (5s)
+│   │   ├── scene2-challenge.mp4      (5s)
+│   │   ├── scene3-solution.mp4       (5s)
+│   │   ├── scene4-drone.mp4          (6s)
+│   │   ├── scene5-command.mp4        (5s)
+│   │   ├── scene6-coverage.mp4       (5s)
+│   │   ├── scene7-detection.mp4      (5s)
+│   │   ├── scene8-scalable.mp4       (5s)
+│   │   └── scene9-closing.mp4        (7s)
+│   ├── audio/
+│   │   └── music.mp3                 (~50-60s, trimmed with fade baked in)
 │   └── img/
-│       ├── tfp-logo.png    (TFP Spartan helmet lockup)
-│       ├── apex-connex.png (Orange Connex box photo — hero image)
-│       ├── apex-pictogram.png (Isometric diagram with drone, cameras, satellite)
-│       └── apex-logo.png   (Red "Ap" periodic table element badge)
+│       ├── tfp-logo.png              (TFP Spartan helmet lockup)
+│       ├── apex-connex.png           (Orange Connex box photo — hero image)
+│       └── apex-logo.png             (Red "Ap" periodic table element badge)
 └── package.json
 ```
 
+---
+
 ## DESIGN SYSTEM
 
-### Colors 
+### Colors
 ```css
 :root {
   --navy: #030d1a;
@@ -79,179 +76,105 @@ APEX-BRIEFING/
 
 ## RUNTIME & TIMING
 
-Total runtime: **50-60 seconds** (music trimmed with fade baked in starting at ~52)
+Total runtime: **48 seconds of content + fade to black = ~52 seconds**
 
 ### Start Screen (before timer begins)
 - Black background
 - TFP Logo centered
-- Text below: `TASK FORCE PROTECTION'
+- Text below: `TASK FORCE PROTECTION`
 - Subtitle: `DEPLOYING APEX TECHNOLOGY`
 - Pulsing border play button: `▶ CLICK TO BEGIN`
-- On click: start music, hide start screen, begin Act 1 at t=0
+- On click: start music, hide start screen, begin Scene 1 at t=0
 
-### Act Timing Breakdown
+### Scene Timing Breakdown
 
-| Act | Time | Duration | Content |
-|-----|------|----------|---------|
-| **1 — APEX at the World Cup** | 0:00–0:06 | 6s | World Cup context, why this matters |
-| **2 — The Challenge** | 0:06–0:20 | 12s | Apex Box reveal, hero image, tagline |
-| **3 — Capabilities** | 0:20–0:42 | 22s | 6 tech features, ~3.5s each |
-| **4 — The Deployment** | 0:42–0:55 | 13s | P&L District specific application |
-| **5 — Close** | 0:55–0:68 | 13s | Logos, contact, fade to black |
-
----
-
-## ACT-BY-ACT SPECIFICATION
-
----
-
-### ACT 1 — THE THREAT (0:00–0:08)
-
-**Purpose:** Establish urgency. World Cup 2026 is coming. Kansas City. Power & Light District. This is not a normal security environment.
-
-**Background:** `act1-bg.mp4` — World Cup / large crowd / stadium context. Dark tones. Opacity 0.25.
-
-**Animation sequence:**
-- **0:00–0:01:** Black. Music begins. Video background fades in.
-- **0:01–0:03:** Text appears, centered:
-  - `FIFA WORLD CUP 2026` — Bebas Neue, clamp(40px, 6vw, 64px), white
-  - Gold line expands below
-  - `KANSAS CITY` — Bebas Neue, 28px, gold
-- **0:03–0:06:** Second text block fades in below:
-  - `Power & Light District — 9 blocks, 2 residential towers, 1 major venue` — Barlow Condensed 400, 15px, grey
-  - `An open-access entertainment zone in the center of it all.` — Barlow Condensed 400, 14px, grey
-- **0:06–0:08:** Final line fades in:
-  - `THIS REQUIRES MORE THAN STANDARD SECURITY.` — Barlow Condensed 600, 16px, white, letter-spacing 0.2em
-- **0:08:** Fade out to Act 2.
+| Scene | Time | Duration | Video File | Title |
+|-------|------|----------|------------|-------|
+| 1 | 0:00–0:05 | 5s | scene1-intro.mp4 | APEX AT THE WORLD CUP |
+| 2 | 0:05–0:10 | 5s | scene2-challenge.mp4 | THE CHALLENGE |
+| 3 | 0:10–0:15 | 5s | scene3-solution.mp4 | OUR SOLUTION |
+| 4 | 0:15–0:21 | 6s | scene4-drone.mp4 | REAL-TIME DRONE NETWORK |
+| 5 | 0:21–0:26 | 5s | scene5-command.mp4 | CENTRALIZED COMMAND |
+| 6 | 0:26–0:31 | 5s | scene6-coverage.mp4 | INTELLIGENT COVERAGE |
+| 7 | 0:31–0:36 | 5s | scene7-detection.mp4 | ADVANCED DETECTION |
+| 8 | 0:36–0:41 | 5s | scene8-scalable.mp4 | SCALABLE & RELIABLE |
+| 9 | 0:41–0:48 | 7s | scene9-closing.mp4 | SECURING THE FUTURE |
+| — | 0:48–0:52 | 4s | — | Fade to black, music ends |
 
 ---
 
-### ACT 2 — THE SOLUTION (0:08–0:20)
+## SCENE-BY-SCENE CONTENT
 
-**Purpose:** Introduce Apex. The orange Connex box is the hero. This is what "more than standard security" looks like.
+### Scene 1 — APEX AT THE WORLD CUP (0:00–0:05)
+**Video:** scene1-intro.mp4
+**Title:** `APEX AT THE WORLD CUP` — Bebas Neue, large, white
+**Content:** Task Force Protection secures the Power & Light District with advanced Apex drone technology for the 2026 FIFA World Cup.
 
-**Background:** `act2-bg.mp4` — dark, tech-oriented footage. Opacity 0.2. The Connex photo is the visual star, not the background video.
+### Scene 2 — THE CHALLENGE (0:05–0:10)
+**Video:** scene2-challenge.mp4
+**Title:** `THE CHALLENGE` — Bebas Neue, large, white
+**Content:** Large-scale events create dynamic, high-density environments that demand real-time situational awareness beyond traditional methods.
 
-**Animation sequence:**
-- **0:08–0:10:** Apex "Ap" logo badge fades in top-center (~80px). Below it:
-  - `INTEGRATED TECHNOLOGY` — Barlow Condensed 600, 13px, gold, letter-spacing 0.5em
-  - `APEX` — Bebas Neue, clamp(60px, 9vw, 100px), white
-  - Gold line expands
-- **0:10–0:14:** Orange Connex box photo (`apex-connex.png`) fades in. Centered, ~450px wide. This is the money shot.
-- **0:14–0:16:** Below the photo:
-  - `DEPLOY ANYWHERE. DEFEND EVERYWHERE.` — Barlow Condensed 500, 15px, gold, letter-spacing 0.25em
-- **0:16–0:20:** Below tagline, a brief description fades in:
-  - `Deployable security infrastructure by Secure Passage — real-time monitoring, intelligent sensors, autonomous drone surveillance, and integrated command capability in a single hardened unit.` — Barlow Condensed 400, 13px, grey, max-width 600px, centered
-- **0:20:** Fade to Act 3.
+### Scene 3 — OUR SOLUTION (0:10–0:15)
+**Video:** scene3-solution.mp4
+**Title:** `OUR SOLUTION` — Bebas Neue, large, white
+**Content:** Apex delivers a mobile, rapidly deployable command platform integrated with intelligent drone networks for comprehensive coverage.
+**Optional:** Show `apex-connex.png` as hero image if layout allows.
 
----
+### Scene 4 — REAL-TIME DRONE NETWORK (0:15–0:21)
+**Video:** scene4-drone.mp4
+**Title:** `REAL-TIME DRONE NETWORK` — Bebas Neue, large, white
+**Content:** Autonomous Apex drones provide persistent aerial oversight with precision gimbal imaging and seamless live feeds.
 
-### ACT 3 — CAPABILITIES (0:20–0:42)
+### Scene 5 — CENTRALIZED COMMAND (0:21–0:26)
+**Video:** scene5-command.mp4
+**Title:** `CENTRALIZED COMMAND` — Bebas Neue, large, white
+**Content:** Unified operations center fuses drone telemetry, sensor data, and ground assets into actionable intelligence.
 
-**Purpose:** The tech specs. Six features, each with its own background video. Fast, punchy, technical. Same rhythm as the capability cards in the TFP Briefing.
+### Scene 6 — INTELLIGENT COVERAGE (0:26–0:31)
+**Video:** scene6-coverage.mp4
+**Title:** `INTELLIGENT COVERAGE` — Bebas Neue, large, white
+**Content:** Multi-layered sensing delivers clear visibility across crowded urban zones, day or night.
 
-**Structure:** 6 features, ~3.5 seconds each. Full-screen takeover per feature with unique video background. Crossfade transitions.
+### Scene 7 — ADVANCED DETECTION (0:31–0:36)
+**Video:** scene7-detection.mp4
+**Title:** `ADVANCED DETECTION` — Bebas Neue, large, white
+**Content:** High-precision PTZ and AI-assisted systems identify and track potential risks with speed and accuracy.
 
-**Layout for each:** Centered text, same card structure as TFP Briefing (number label, title, gold line, description).
+### Scene 8 — SCALABLE & RELIABLE (0:36–0:41)
+**Video:** scene8-scalable.mp4
+**Title:** `SCALABLE & RELIABLE` — Bebas Neue, large, white
+**Content:** Proven drone fleet architecture scales effortlessly while maintaining continuous, organized patrol patterns.
 
-#### Feature 1 — Gunshot Detection (0:20–0:23.5)
-- **Video:** `act3-v1.mp4`
-- **Label:** `01`
-- **Title:** `GUNSHOT DETECTION & BEHAVIOR ANALYSIS`
-- **Description:** `Intelligent sensor technology with aggressive behavior tracking and spoken word analysis`
+### Scene 9 — SECURING THE FUTURE (0:41–0:48)
+**Video:** scene9-closing.mp4
+**Title:** `SECURING THE FUTURE` — Bebas Neue, large, white
+**Content:** Task Force Protection + Apex technology ensures safe, world-class experiences in the Power & Light District during the 2026 World Cup.
+**Additional elements:**
+- TFP logo (~200px)
+- Apex "Ap" logo badge (~50px)
+- `Technology Partner: Secure Passage` — Barlow Condensed 400, 12px, grey
+- `(660) 227-9063` — Barlow Condensed 400, 15px, grey
+- `taskforceprotectiongov.com` — Barlow Condensed 400, 15px, gold
 
-#### Feature 2 — Thermal & Night Vision (0:23.5–0:27)
-- **Video:** `act3-v2.mp4`
-- **Label:** `02`
-- **Title:** `THERMAL & NIGHT VISION SURVEILLANCE`
-- **Description:** `Advanced video with movement tracking, perimeter monitoring, and panoramic coverage`
-
-#### Feature 3 — License Plate Recognition (0:27–0:30.5)
-- **Video:** `act3-v3.mp4`
-- **Label:** `03`
-- **Title:** `LICENSE PLATE RECOGNITION & CROWD INTELLIGENCE`
-- **Description:** `Pedestrian and traffic tracking, crowd movement analysis for dynamic response`
-
-#### Feature 4 — Autonomous Drones (0:30.5–0:34)
-- **Video:** `act3-v4.mp4`
-- **Label:** `04`
-- **Title:** `AUTONOMOUS DRONE SURVEILLANCE`
-- **Description:** `Integrated launch pad for automated aerial monitoring — uninterrupted overhead coverage`
-
-#### Feature 5 — Truman PDR Integration (0:34–0:37.5)
-- **Video:** `act3-v5.mp4`
-- **Label:** `05`
-- **Title:** `TRUMAN PDR — PHYSICAL DETECTION & RESPONSE`
-- **Description:** `Proactive risk management platform by Secure Passage — real-time alerts and automated reporting`
-
-#### Feature 6 — Haystax OIC (0:37.5–0:42)
-- **Video:** `act3-v6.mp4`
-- **Label:** `06`
-- **Title:** `HAYSTAX OIC — OPERATIONAL INTELLIGENCE CENTER`
-- **Description:** `Organizational and community safety platform — seamless remote monitoring and threat modeling`
+### After Scene 9 (0:48–0:52)
+Fade to black. Music ends. No loop. Done.
 
 ---
 
-### ACT 4 — THE DEPLOYMENT (0:42–0:55)
-
-**Purpose:** Make it specific to Cordish. This isn't theoretical — here's how Apex deploys at Power & Light for World Cup.
-
-**Background:** `act4-bg.mp4` — urban/district context, dark tones. Opacity 0.25.
-
-**This is a single screen with the isometric pictogram as the visual anchor.**
-
-**Animation sequence:**
-- **0:42–0:44:** Apex pictogram (`apex-pictogram.png`) fades in, centered, ~350px wide. The isometric diagram showing the full ecosystem — container, drone, cameras, satellite, weather station.
-- **0:44–0:46:** Title above or below pictogram:
-  - `DEPLOYMENT: POWER & LIGHT DISTRICT` — Bebas Neue, clamp(28px, 4vw, 40px), white
-  - Gold line
-- **0:46–0:55:** Deployment details appear as a grid or stacked list, fading in staggered:
-  - `KC LIVE! VENUE — Perimeter surveillance, event crowd monitoring`
-  - `ONE LIGHT & TWO LIGHT TOWERS — 24/7 residential coverage`
-  - `9-BLOCK ENTERTAINMENT DISTRICT — Roving drone patrols, sensor coverage`
-  - `WORLD CUP MATCH DAYS — Elevated posture, federal agency coordination`
-  - Each line: Barlow Condensed 400, 13px, white. Location name in gold or bold.
-
----
-
-### ACT 5 — CLOSE (0:55–0:68)
-
-**Purpose:** Partnership branding. TFP + Secure Passage. Contact. Done.
-
-**Background:** `act5-bg.mp4` — dark atmospheric. Opacity 0.2.
-
-**Animation sequence:**
-- **0:55–0:57:** Black pause. Then TFP logo fades in, centered, ~200px wide.
-- **0:57–0:59:** Below TFP logo:
-  - `TASK FORCE PROTECTION LLC` — Bebas Neue, 22px, white
-  - Gold line (100px)
-- **0:59–0:61:** Apex "Ap" badge appears below the gold line (~50px), with:
-  - `Technology Partner: Secure Passage` — Barlow Condensed 400, 12px, grey
-- **0:61–0:63:** Contact info fades in:
-  - `(660) 227-9063` — Barlow Condensed 400, 15px, grey
-  - `taskforceprotectiongov.com` — Barlow Condensed 400, 15px, gold
-- **0:63–0:68:** Hold. Music fading (fade baked into audio). Everything fades to black.
-
-- **After 0:68:** Black screen. No loop. Done.
-
----
-
-## JAVASCRIPT ARCHITECTURE
-
-Same as TFP Briefing — single timer driven by `music.currentTime`, simple timeline array, `requestAnimationFrame` loop. Scene activation by time. Sub-animations by time thresholds.
+## JAVASCRIPT TIMELINE
 
 ```javascript
 const timeline = [
-  { start: 0,    end: 8,    scene: 'act1' },
-  { start: 8,    end: 20,   scene: 'act2' },
-  { start: 20,   end: 23.5, scene: 'feat1' },
-  { start: 23.5, end: 27,   scene: 'feat2' },
-  { start: 27,   end: 30.5, scene: 'feat3' },
-  { start: 30.5, end: 34,   scene: 'feat4' },
-  { start: 34,   end: 37.5, scene: 'feat5' },
-  { start: 37.5, end: 42,   scene: 'feat6' },
-  { start: 42,   end: 55,   scene: 'act4' },
-  { start: 55,   end: 68,   scene: 'act5' },
+  { start: 0,  end: 5,  scene: 'scene1' },
+  { start: 5,  end: 10, scene: 'scene2' },
+  { start: 10, end: 15, scene: 'scene3' },
+  { start: 15, end: 21, scene: 'scene4' },
+  { start: 21, end: 26, scene: 'scene5' },
+  { start: 26, end: 31, scene: 'scene6' },
+  { start: 31, end: 36, scene: 'scene7' },
+  { start: 36, end: 41, scene: 'scene8' },
+  { start: 41, end: 48, scene: 'scene9' },
 ];
 ```
 
@@ -261,16 +184,13 @@ Music volume: 0.15. No JS volume fade needed — fade is baked into the audio fi
 
 ## ASSET PREPARATION
 
-### Already available (copy from TFP-BRIEFING repo):
-- `music.mp3` — trimmed 68s version of "The Mountain" (already exists)
+### Already in repo:
+- `music.mp3` — needs to be re-trimmed to ~52s to match new runtime
 - `tfp-logo.png` — TFP Spartan helmet
 - `apex-connex.png` — Orange Connex box photo
-- `apex-pictogram.png` — Isometric diagram
 - `apex-logo.png` — Red "Ap" periodic table element
 
-### Needed from Brian:
-- Video assets for each act/feature — Brian will provide the list
-- All videos should be compressed before adding:
+### Video compression standard:
 ```bash
 ffmpeg -i INPUT.mp4 -vf "scale=960:-2" -c:v libx264 -crf 28 -preset slow -an -pix_fmt yuv420p OUTPUT.mp4
 ```
@@ -279,14 +199,12 @@ ffmpeg -i INPUT.mp4 -vf "scale=960:-2" -c:v libx264 -crf 28 -preset slow -an -pi
 
 ## CC EXECUTION ORDER
 
-1. Create GitHub repo `APEX-BRIEFING`
-2. Create folder structure: `assets/audio/`, `assets/video/`, `assets/img/`
-3. Copy shared assets from TFP-BRIEFING (music, logos, Apex images)
-4. Add video assets as Brian provides them
-5. Add this spec as `SPEC.md`
-6. Add `package.json` for Railway static serving
-7. Commit and push: `"Initial setup: folder structure, assets, spec"`
-8. Brian directs ChatGPT to the repo to build the HTML presentation
+1. ~~Create GitHub repo `APEX-BRIEFING`~~ (done)
+2. ~~Create folder structure~~ (done)
+3. ~~Copy shared assets~~ (done)
+4. ~~Add video assets~~ (Brian uploading)
+5. Update `SPEC.md` with this document
+6. Brian directs ChatGPT to the repo to build the HTML presentation
 
 ---
 
