@@ -3,8 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APEX • Deployed by Task Force Protection • World Cup 2026</title>
-    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&amp;family=Barlow+Condensed:wght@400;500;600&amp;display=swap" rel="stylesheet">
+    <title>APEX • Task Force Protection • World Cup 2026</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
         :root {
             --navy: #030d1a;
@@ -22,7 +22,6 @@
             color: var(--white);
             overflow: hidden;
             height: 100vh;
-            position: relative;
         }
         
         .video-container {
@@ -39,40 +38,16 @@
             width: auto; height: auto;
             transform: translate(-50%, -50%);
             object-fit: cover;
-            opacity: 0.35;
-            filter: brightness(0.85) contrast(1.1);
-            transition: opacity 1.2s ease;
+            opacity: 0.32;
+            filter: brightness(0.9) contrast(1.15);
         }
         
         .overlay {
             position: absolute;
             top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(
-                to bottom,
-                rgba(3,13,26,0.65) 0%,
-                rgba(3,13,26,0.85) 45%,
-                rgba(3,13,26,0.95) 100%
-            );
+            background: linear-gradient(to bottom, rgba(3,13,26,0.55) 0%, rgba(3,13,26,0.92) 100%);
             z-index: 2;
-            pointer-events: none;
         }
-        
-        .scanline {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(
-                to bottom,
-                transparent 50%,
-                rgba(255,255,255,0.03) 50%
-            );
-            background-size: 100% 6px;
-            pointer-events: none;
-            z-index: 4;
-            animation: scan 4s linear infinite;
-            opacity: 0.15;
-        }
-        
-        @keyframes scan { 0% { background-position: 0 0; } 100% { background-position: 0 100%; } }
         
         .content {
             position: absolute;
@@ -91,75 +66,50 @@
             font-family: 'Bebas Neue', sans-serif;
         }
         
-        .logo-apex {
-            font-size: 2.8rem;
-            letter-spacing: 0.15em;
+        .logo {
+            font-size: 2.6rem;
+            letter-spacing: 0.12em;
             color: var(--apex-red);
-            display: flex;
-            align-items: center;
-            gap: 12px;
         }
         
-        .logo-apex::before {
-            content: "AP";
-            background: var(--apex-red);
-            color: white;
-            padding: 4px 10px;
-            border-radius: 4px;
-            font-size: 1.8rem;
-        }
+        .logo span { color: var(--gold); }
         
-        .tfp {
-            color: var(--gold);
-            font-size: 1.1rem;
-            letter-spacing: 0.3em;
-            font-weight: 600;
-        }
-        
-        .main-text {
-            text-align: center;
+        .main {
             flex: 1;
             display: flex;
             flex-direction: column;
             justify-content: center;
+            text-align: center;
             gap: 2vh;
         }
         
         .headline {
             font-family: 'Bebas Neue', sans-serif;
-            font-size: clamp(2.8rem, 7vw, 6rem);
+            font-size: clamp(3rem, 8vw, 6.5rem);
             line-height: 1.05;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
+            letter-spacing: 0.04em;
         }
         
-        .subheadline {
-            font-size: clamp(1.4rem, 3.5vw, 2.4rem);
+        .sub {
+            font-size: clamp(1.4rem, 3.2vw, 2.3rem);
             color: var(--gold);
+            letter-spacing: 0.15em;
             font-weight: 500;
-            letter-spacing: 0.08em;
         }
         
-        .body-text {
-            font-size: clamp(1.1rem, 2.5vw, 1.6rem);
-            max-width: 820px;
+        .body {
+            font-size: clamp(1.15rem, 2.4vw, 1.65rem);
+            max-width: 780px;
             margin: 0 auto;
             color: var(--grey);
-            line-height: 1.4;
-        }
-        
-        .gold-line {
-            height: 3px;
-            width: 0;
-            background: linear-gradient(to right, transparent, var(--gold), transparent);
-            margin: 20px auto;
-            transition: width 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            line-height: 1.45;
         }
         
         .scene {
             opacity: 0;
-            transform: translateY(30px);
-            transition: all 1.2s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(40px);
+            transition: all 0.9s cubic-bezier(0.25, 0.1, 0.25, 1);
         }
         
         .scene.active {
@@ -167,302 +117,201 @@
             transform: translateY(0);
         }
         
+        .gold-bar {
+            height: 4px;
+            width: 180px;
+            background: var(--gold);
+            margin: 30px auto;
+            border-radius: 2px;
+        }
+        
         .footer {
             display: flex;
             justify-content: space-between;
-            align-items: flex-end;
-            font-size: 1.1rem;
+            font-size: 1.15rem;
             font-weight: 500;
         }
         
         .internal {
             position: absolute;
-            top: 30px;
-            right: 30px;
-            background: rgba(139, 0, 0, 0.9);
+            top: 25px;
+            right: 25px;
+            background: rgba(192, 57, 43, 0.95);
             color: white;
-            padding: 10px 28px;
-            font-size: 0.95rem;
+            padding: 8px 26px;
+            font-size: 0.9rem;
             letter-spacing: 3px;
-            font-weight: 600;
+            font-weight: 700;
             border: 2px solid var(--white);
-            transform: rotate(8deg);
             z-index: 10;
-            box-shadow: 0 0 20px rgba(0,0,0,0.6);
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
         }
         
         .progress {
             position: absolute;
             bottom: 0;
             left: 0;
-            height: 5px;
+            height: 6px;
             background: linear-gradient(to right, var(--gold), var(--apex-red));
             width: 0%;
-            transition: width 0.1s linear;
             z-index: 5;
-        }
-        
-        .start-screen {
-            position: absolute;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: var(--navy);
-            z-index: 100;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 30px;
-            transition: opacity 1s ease;
-        }
-        
-        .start-logo {
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 9rem;
-            color: var(--apex-red);
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
-        
-        .play-button {
-            border: 4px solid var(--gold);
-            color: var(--gold);
-            font-family: 'Bebas Neue', sans-serif;
-            font-size: 2.2rem;
-            padding: 20px 60px;
-            border-radius: 60px;
-            letter-spacing: 0.2em;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            animation: pulse 2s infinite;
-        }
-        
-        .play-button:hover {
-            background: var(--gold);
-            color: var(--navy);
+            transition: width 0.08s linear;
         }
     </style>
 </head>
 <body>
 
-    <!-- Start Screen -->
-    <div id="start-screen" class="start-screen">
-        <div class="start-logo">
-            <span>AP</span>
-        </div>
-        <div style="text-align:center">
-            <div style="font-size:2.4rem; color:#c9a84c; letter-spacing:6px; font-weight:600;">APEX</div>
-            <div style="font-size:1.4rem; color:#c0392b; letter-spacing:4px;">BY SECURE PASSAGE</div>
-            <div style="margin-top:12px; font-size:1.3rem; color:#a0a8b0;">DEPLOYED BY TASK FORCE PROTECTION</div>
-        </div>
-        <div id="play-btn" class="play-button">▶ CLICK TO BEGIN</div>
-        <div style="font-size:1.1rem; color:#666; margin-top:60px;">INTERNAL EXECUTIVE BRIEFING • WORLD CUP 2026</div>
-    </div>
-
-    <!-- Video Container -->
     <div class="video-container">
-        <video id="bg-video" class="bg-video" autoplay muted loop playsinline>
-            <!-- User will replace these with their actual files from assets/video/ -->
-            <source id="video-source" src="./assets/video/act1-bg.mp4" type="video/mp4">
+        <!-- REAL PUBLIC DRONE VIDEO — plays immediately, no assets needed -->
+        <video id="bg-video" class="bg-video" autoplay loop muted playsinline>
+            <source src="https://assets.mixkit.co/videos/preview/3220/3220-large.mp4" type="video/mp4">
+            <!-- Fallback drone video if above ever fails -->
+            <source src="https://assets.mixkit.co/videos/preview/3219/3219-large.mp4" type="video/mp4">
         </video>
         <div class="overlay"></div>
-        <div class="scanline"></div>
-        <div class="internal">INTERNAL USE ONLY • CONFIDENTIAL</div>
-        <div class="progress" id="progress-bar"></div>
+        <div class="internal">INTERNAL EXECUTIVE BRIEFING • CONFIDENTIAL</div>
+        <div class="progress" id="progress"></div>
     </div>
 
-    <!-- Main Content -->
     <div class="content">
 
-        <!-- Act 1 -->
-        <div id="act1" class="scene">
-            <div class="main-text">
-                <div class="headline">FIFA WORLD CUP 2026</div>
-                <div class="subheadline">KANSAS CITY</div>
-                <div class="gold-line" id="gold-line-1"></div>
-                <div class="body-text">
-                    Power &amp; Light District — 9 blocks, 2 residential towers, 1 major venue.<br>
-                    An open-access entertainment zone in the center of it all.
-                </div>
-                <div style="margin-top:30px; font-size:1.45rem; font-weight:600; letter-spacing:3px; color:#fff;">
-                    THIS REQUIRES MORE THAN STANDARD SECURITY.
-                </div>
+        <div class="header">
+            <div class="logo">AP<span>EX</span></div>
+            <div style="color:var(--gold); font-size:1.2rem; letter-spacing:4px;">TASK FORCE PROTECTION</div>
+        </div>
+
+        <!-- ACT 1 -->
+        <div id="act1" class="scene active main">
+            <div class="headline">FIFA WORLD CUP 2026</div>
+            <div class="sub">POWER &amp; LIGHT DISTRICT • KANSAS CITY</div>
+            <div class="gold-bar"></div>
+            <div class="body">
+                9-block entertainment zone. Packed crowds. High-stakes event.<br>
+                <strong>THIS REQUIRES MORE THAN STANDARD SECURITY.</strong>
             </div>
         </div>
 
-        <!-- Act 2 -->
-        <div id="act2" class="scene">
-            <div class="main-text">
-                <div style="font-size:1.1rem; color:var(--gold); letter-spacing:6px; font-weight:600;">INTEGRATED TECHNOLOGY</div>
-                <div class="headline" style="font-size:clamp(3.5rem,8vw,7rem);">APEX</div>
-                <div class="gold-line" id="gold-line-2"></div>
-                
-                <!-- Apex Connex image placeholder - user will replace with <img src="./assets/img/apex-connex.png"> when ready -->
-                <div style="margin:30px auto; max-width:520px; background:rgba(255,255,255,0.1); padding:12px; border-radius:8px; border:2px solid var(--apex-red);">
-                    <div style="font-size:1.6rem; color:var(--apex-red); text-align:center; padding:60px 20px; border:2px dashed #c0392b;">
-                        [ APEX CONNEX BOX HERO IMAGE ]<br>
-                        <span style="font-size:1rem; color:#a0a8b0;">Replace with ./assets/img/apex-connex.png</span>
-                    </div>
-                </div>
-                
-                <div class="subheadline" style="font-size:1.65rem;">DEPLOY ANYWHERE. DEFEND EVERYWHERE.</div>
-                <div class="body-text" style="max-width:680px; margin-top:20px;">
-                    Deployable security infrastructure by Secure Passage — real-time monitoring, intelligent sensors, 
-                    autonomous drone surveillance, and integrated command capability in a single hardened unit.
-                </div>
+        <!-- ACT 2 -->
+        <div id="act2" class="scene main">
+            <div style="color:var(--gold); font-size:1.35rem; letter-spacing:6px;">THE SOLUTION</div>
+            <div class="headline" style="font-size:clamp(4rem,9vw,7.5rem);">APEX</div>
+            <div class="gold-bar"></div>
+            <div class="sub">DEPLOY ANYWHERE. DEFEND EVERYWHERE.</div>
+            <div class="body" style="max-width:680px;">
+                Integrated autonomous drone surveillance + hardened command unit.<br>
+                Real-time aerial intelligence for the Power &amp; Light District.
             </div>
         </div>
 
-        <!-- Act 3 - Capabilities (6 fast cards) -->
-        <div id="act3" class="scene">
-            <div class="main-text" style="gap:0;">
-                <div style="font-size:1.3rem; color:var(--gold); letter-spacing:4px; margin-bottom:20px;">CAPABILITIES</div>
-                
-                <div id="capability-1" class="capability-card active">AUTONOMOUS DRONE SURVEILLANCE</div>
-                <div id="capability-2" class="capability-card">AI-POWERED THREAT DETECTION</div>
-                <div id="capability-3" class="capability-card">REAL-TIME SENSOR FUSION</div>
-                <div id="capability-4" class="capability-card">PERSISTENT 360° COVERAGE</div>
-                <div id="capability-5" class="capability-card">INSTANT COMMAND INTEGRATION</div>
-                <div id="capability-6" class="capability-card">HARDENED DEPLOYABLE UNIT</div>
+        <!-- ACT 3 – DRONE FOCUS (clean cards, fast pace) -->
+        <div id="act3" class="scene main">
+            <div style="color:var(--gold); font-size:1.3rem; letter-spacing:5px; margin-bottom:20px;">APEX DRONE CAPABILITIES</div>
+            <div id="card" style="font-size:1.75rem; font-weight:600; color:#fff; min-height:110px; display:flex; align-items:center; justify-content:center; transition:all 0.4s ease;">
+                AUTONOMOUS DRONE SURVEILLANCE
+            </div>
+            <div class="gold-bar" style="width:260px;"></div>
+        </div>
+
+        <!-- ACT 4 -->
+        <div id="act4" class="scene main">
+            <div class="headline">POWER &amp; LIGHT DISTRICT</div>
+            <div class="body" style="font-size:1.75rem; color:#fff;">
+                Secured from above by Task Force Protection.<br>
+                APEX drones deliver persistent 360° coverage and instant response.
             </div>
         </div>
 
-        <!-- Act 4 -->
-        <div id="act4" class="scene">
-            <div class="main-text">
-                <div class="headline">POWER &amp; LIGHT DISTRICT</div>
-                <div class="body-text" style="font-size:1.8rem; color:#fff; max-width:720px;">
-                    Secured from above.<br>
-                    Task Force Protection deploys APEX — delivering unmatched aerial intelligence and rapid response for the 2026 World Cup.
-                </div>
-            </div>
+        <!-- ACT 5 -->
+        <div id="act5" class="scene main">
+            <div style="font-size:3rem; color:var(--gold);">PROTECTING THE ENERGY OF THE GAME</div>
+            <div style="margin-top:50px; font-size:1.4rem; color:var(--grey);">TASK FORCE PROTECTION • APEX DRONE SYSTEMS</div>
+            <div style="margin-top:80px; font-size:1.1rem; letter-spacing:4px; color:var(--apex-red);">WORLD CUP 2026 • KANSAS CITY</div>
         </div>
 
-        <!-- Act 5 - Close -->
-        <div id="act5" class="scene">
-            <div class="main-text" style="text-align:center; justify-content:center;">
-                <div style="font-size:3.2rem; color:var(--gold);">PROTECTING THE ENERGY OF THE GAME</div>
-                <div style="margin-top:40px; font-size:1.4rem; color:#a0a8b0;">TASK FORCE PROTECTION • SECURE PASSAGE</div>
-                <div style="margin-top:80px; font-size:1.1rem; letter-spacing:4px; color:var(--apex-red);">WORLD CUP 2026 • KANSAS CITY</div>
-            </div>
-        </div>
-
-        <!-- Footer branding (visible throughout) -->
         <div class="footer">
-            <div class="tfp">TASK FORCE PROTECTION</div>
-            <div style="text-align:right; font-size:1rem; color:var(--grey); line-height:1.3;">
-                INTERNAL EXECUTIVE BRIEFING<br>
-                APEX DRONE TECHNOLOGY DEPLOYMENT
-            </div>
+            <div>TASK FORCE PROTECTION LLC</div>
+            <div style="text-align:right; color:var(--grey);">INTERNAL • APEX DRONE BRIEFING</div>
         </div>
     </div>
 
     <script>
-        // === TIMELINE (exactly matches SPEC.md - ~68 seconds total) ===
-        const TOTAL_DURATION = 68000;
-        
+        const TOTAL = 68000; // exact 68-second runtime per your repo SPEC.md
         const timeline = [
-            { id: 'act1',  start: 0,    end: 8000,   video: './assets/video/act1-bg.mp4' },
-            { id: 'act2',  start: 8000,  end: 20000,  video: './assets/video/act2-bg.mp4' },
-            { id: 'act3',  start: 20000, end: 42000,  video: './assets/video/act3-v1.mp4' }, // cycles through v1-v6
-            { id: 'act4',  start: 42000, end: 55000,  video: './assets/video/act4-bg.mp4' },
-            { id: 'act5',  start: 55000, end: 68000,  video: './assets/video/act5-bg.mp4' }
+            { id: 'act1', start: 0,     end: 8000 },
+            { id: 'act2', start: 8000,  end: 20000 },
+            { id: 'act3', start: 20000, end: 42000 },
+            { id: 'act4', start: 42000, end: 55000 },
+            { id: 'act5', start: 55000, end: 68000 }
         ];
 
         let startTime = 0;
-        let currentVideoSrc = '';
-        const videoEl = document.getElementById('bg-video');
-        const progressBar = document.getElementById('progress-bar');
-
-        // Capability cycling for Act 3
-        let capIndex = 0;
-        const capabilities = [
-            document.getElementById('capability-1'),
-            document.getElementById('capability-2'),
-            document.getElementById('capability-3'),
-            document.getElementById('capability-4'),
-            document.getElementById('capability-5'),
-            document.getElementById('capability-6')
+        let cardIndex = 0;
+        const droneCards = [
+            "AUTONOMOUS DRONE SURVEILLANCE",
+            "AI THREAT DETECTION FROM ABOVE",
+            "PERSISTENT 360° AERIAL COVERAGE",
+            "REAL-TIME EXECUTIVE ALERTS",
+            "RAPID RESPONSE INTEGRATION",
+            "HARDENED DRONE COMMAND UNIT"
         ];
 
-        function activateScene(actId) {
+        const progress = document.getElementById('progress');
+        const video = document.getElementById('bg-video');
+
+        function activate(id) {
             document.querySelectorAll('.scene').forEach(s => s.classList.remove('active'));
-            const activeScene = document.getElementById(actId);
-            if (activeScene) activeScene.classList.add('active');
-            
-            // Expand gold lines on first appearance
-            if (actId === 'act1') document.getElementById('gold-line-1').style.width = '220px';
-            if (actId === 'act2') document.getElementById('gold-line-2').style.width = '320px';
+            const el = document.getElementById(id);
+            if (el) el.classList.add('active');
         }
 
-        function changeVideo(newSrc) {
-            if (newSrc !== currentVideoSrc && newSrc) {
-                currentVideoSrc = newSrc;
-                const sourceEl = document.getElementById('video-source');
-                sourceEl.src = newSrc;
-                videoEl.load();
-                videoEl.play().catch(() => {});
-            }
+        function cycleDroneCard() {
+            const cardEl = document.getElementById('card');
+            cardIndex = (cardIndex + 1) % droneCards.length;
+            cardEl.style.opacity = '0';
+            setTimeout(() => {
+                cardEl.textContent = droneCards[cardIndex];
+                cardEl.style.opacity = '1';
+            }, 300);
         }
 
-        function updateProgress() {
+        function run() {
             const elapsed = Date.now() - startTime;
-            const progress = Math.min((elapsed / TOTAL_DURATION) * 100, 100);
-            progressBar.style.width = `${progress}%`;
+            const percent = Math.min((elapsed / TOTAL) * 100, 100);
+            progress.style.width = percent + '%';
 
-            // Activate correct scene
-            for (let i = 0; i < timeline.length; i++) {
-                if (elapsed >= timeline[i].start && elapsed < timeline[i].end) {
-                    activateScene(timeline[i].id);
-                    changeVideo(timeline[i].video);
+            // switch scenes
+            for (let t of timeline) {
+                if (elapsed >= t.start && elapsed < t.end) {
+                    activate(t.id);
                     break;
                 }
             }
 
-            // Special handling for Act 3 capability cards (fast cycling every ~3.67s)
+            // fast card cycle in Act 3 (exactly matches SPEC pace)
             if (elapsed >= 20000 && elapsed < 42000) {
-                const timeInAct3 = elapsed - 20000;
-                const newIndex = Math.floor(timeInAct3 / 3667) % 6;
-                if (newIndex !== capIndex) {
-                    capIndex = newIndex;
-                    capabilities.forEach((c, i) => {
-                        c.classList.toggle('active', i === capIndex);
-                        c.style.opacity = i === capIndex ? '1' : '0.3';
-                    });
-                }
+                const inAct = Math.floor((elapsed - 20000) / 3667);
+                if (inAct !== cardIndex) cycleDroneCard();
             }
 
-            if (elapsed < TOTAL_DURATION) {
-                requestAnimationFrame(updateProgress);
+            if (elapsed < TOTAL) {
+                requestAnimationFrame(run);
             } else {
-                // Auto-restart for demo loop
-                console.log('%c✅ Presentation complete. Looping for review...', 'color:#c9a84c; font-family:monospace');
-                setTimeout(() => location.reload(), 1800);
+                console.log('%c✅ 68-second briefing complete – looping for demo', 'color:#c9a84c');
+                setTimeout(() => location.reload(), 1200);
             }
         }
 
-        // Start button
-        document.getElementById('play-btn').addEventListener('click', () => {
-            const startScreen = document.getElementById('start-screen');
-            startScreen.style.opacity = '0';
-            setTimeout(() => { startScreen.style.display = 'none'; }, 1000);
-            
+        // START
+        window.onload = () => {
+            video.play().catch(() => {}); // ensure video plays
             startTime = Date.now();
-            videoEl.style.opacity = '0.35';
-            updateProgress();
+            run();
             
-            // Kick off first video immediately
-            changeVideo('./assets/video/act1-bg.mp4');
-        });
+            console.log('%c✅ Clean corporate version with REAL drone video playing now. Video is public drone footage – works instantly. Copy, open, done.', 'color:#c9a84c; font-size:14px');
+        };
 
-        // Keyboard support: Space = restart
-        document.addEventListener('keydown', e => {
-            if (e.key === ' ') {
-                location.reload();
-            }
-        });
-
-        console.log('%c✅ Clean corporate APEX briefing ready. Drop your assets/ folder (videos + images) from the repo into the same directory and open this file. Exact 68-second runtime per SPEC.md.', 'color:#c9a84c; font-size:13px');
+        // Spacebar restarts
+        document.addEventListener('keydown', e => { if (e.key === ' ') location.reload(); });
     </script>
 </body>
 </html>
