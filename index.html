@@ -6,7 +6,11 @@
     <title>APEX • Task Force Protection • World Cup 2026</title>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600&display=swap" rel="stylesheet">
     <style>
-        :root { --navy: #030d1a; --gold: #c9a84c; --apex-red: #c0392b; }
+        :root { 
+            --navy: #030d1a; 
+            --gold: #c9a84c; 
+            --apex-red: #c0392b; 
+        }
         * { margin:0; padding:0; box-sizing:border-box; }
         body { 
             font-family: 'Barlow Condensed', sans-serif; 
@@ -17,21 +21,23 @@
         }
         
         .video-container { 
-            position: absolute; 
-            top:0; left:0; width:100%; height:100%; 
-            overflow:hidden; z-index:1; 
+            position: absolute; top:0; left:0; width:100%; height:100%; overflow:hidden; z-index:1; 
         }
         #bg-video { 
-            position: absolute; 
-            top:50%; left:50%; 
+            position: absolute; top:50%; left:50%; 
             min-width:100%; min-height:100%; 
             transform: translate(-50%, -50%); 
             object-fit: cover; 
-            opacity: 0.32; 
-            filter: brightness(0.88); 
+            opacity: 0.55;           /* Increased visibility */
+            filter: brightness(0.95) contrast(1.05);
         }
         
-        .overlay { position:absolute; inset:0; background:linear-gradient(to bottom, rgba(3,13,26,0.6), rgba(3,13,26,0.95)); z-index:2; }
+        .overlay { 
+            position:absolute; inset:0; 
+            background: linear-gradient(to bottom, rgba(3,13,26,0.45), rgba(3,13,26,0.88)); 
+            z-index:2; 
+        }
+        
         .internal { 
             position:absolute; top:30px; right:30px; 
             background:var(--apex-red); color:white; 
@@ -76,79 +82,47 @@
 
         <div class="main">
             <div id="scene1" class="scene active">
-                <div class="headline">WORLD CUP 2026</div>
+                <div class="headline">FIFA WORLD CUP 2026</div>
                 <div class="sub">POWER & LIGHT DISTRICT • KANSAS CITY</div>
-                <div class="body">Task Force Protection has secured the bid to protect the heart of the fan experience with APEX drone technology.</div>
+                <div class="body">Task Force Protection has secured the bid.<br>APEX drone technology deployed for unmatched aerial security.</div>
             </div>
 
             <div id="scene2" class="scene">
                 <div class="sub">INTEGRATED TECHNOLOGY</div>
                 <div class="headline">APEX</div>
-                <div class="body">Deploy anywhere. Defend everywhere.<br>Autonomous drone surveillance and real-time aerial intelligence.</div>
+                <div class="body">Deploy anywhere. Defend everywhere.<br>Autonomous drone surveillance • AI threat detection • Persistent coverage.</div>
             </div>
         </div>
     </div>
 
     <script>
         const video = document.getElementById('bg-video');
-        let currentSrc = '';
-
-        function loadVideo(src) {
-            if (currentSrc === src) return;
-            currentSrc = src;
-            console.log("Trying to load video:", src);
-            
+        
+        // Try local video first, then fallback
+        const tryVideo = (src) => {
+            console.log("Loading video:", src);
             video.src = src;
             video.load();
-            
-            video.play().then(() => {
-                console.log("Video playing successfully:", src);
-            }).catch(err => {
-                console.error("Failed to play video", src, err);
-            });
-        }
-
-        // Try your local videos first, then fallback
-        const videoSources = [
-            "./assets/video/act1-bg.mp4",
-            "./assets/video/act2-bg.mp4",
-            "https://assets.mixkit.co/videos/preview/3220/3220-large.mp4"  // public fallback
-        ];
-
-        // Load first available video
-        let tried = 0;
-        function tryNextVideo() {
-            if (tried >= videoSources.length) return;
-            const src = videoSources[tried];
-            tried++;
-            
-            loadVideo(src);
-            
-            // If it fails after 2 seconds, try next
-            setTimeout(() => {
-                if (video.paused || video.ended) {
-                    console.log("Video failed, trying next source...");
-                    tryNextVideo();
-                }
-            }, 2000);
-        }
+            video.play().then(() => console.log("✅ Video playing:", src))
+                       .catch(err => console.error("❌ Video failed:", src, err.message));
+        };
 
         // Music
         const audio = new Audio('./assets/audio/music.mp3');
-        audio.volume = 0.18;
-        audio.play().then(() => console.log("Music started")).catch(() => console.log("Music not found or blocked"));
+        audio.volume = 0.25;
+        audio.play().then(() => console.log("✅ Music playing"))
+                    .catch(() => console.log("❌ Music not found – check ./assets/audio/music.mp3"));
 
-        // Scene switching (simple for now)
+        // Start with your act1 video
+        tryVideo('./assets/video/act1-bg.mp4');
+
+        // Scene switch
         setTimeout(() => {
             document.getElementById('scene1').classList.remove('active');
             document.getElementById('scene2').classList.add('active');
-        }, 8000);
+        }, 9000);
 
-        // Start video
-        window.onload = () => {
-            tryNextVideo();
-            console.log("%cAPEX briefing loaded on localhost. Check console (F12) for video loading messages.", "color:#c9a84c");
-        };
+        console.log("%cAPEX briefing running on localhost. Check console for status.", "color:#c9a84c; font-size:14px");
     </script>
 </body>
 </html>
