@@ -1,20 +1,19 @@
-# APEX BRIEFING — Complete Build Specification
-## For CC (repo setup/assets) and ChatGPT (HTML build)
+# TASK FORCE PROTECTION -- APEX BRIEFING — Complete Build Specification
+
 ## Date: March 29, 2026
 
 ---
 
 ## OVERVIEW
 
-Build a cinematic technology briefing showcasing TFP's deployment of the Apex Box (by Secure Passage) for World Cup 2026 security at the Power & Light District. This is the companion piece to the TFP Capabilities Briefing — that one says "here's who we are," this one says "here's the technology we're deploying at your district."
+Build a cinematic technology briefing showcasing TFP's deployment of the Apex Box (by Secure Passage) for World Cup 2026 security at the Power & Light District. This is a html presentation that will be sent to executives in charge of the Power and Light district to thank them for awarding the bid and saying "here's who we are," this one says "here's the technology we're deploying at your district."
 
 **No voiceover.** Text on screen + video backgrounds + music. Same format as the TFP Briefing.
 
-**Runtime:** ~68 seconds, synced to a trimmed version of "The Mountain" cinematic track.
+**Runtime:** 50-60 seconds, synced to a trimmed version of "The Mountain" cinematic track.
 
-**Audience:** Cordish Companies executive. Bo emails this as a follow-up alongside the TFP Capabilities Briefing.
-
-**Deployment:** Hosted URL (Railway from GitHub), potentially at `apex.taskforceprotectiongov.com`
+**Audience:** Cordish Companies executive. Bo emails a link to this, which will be hosted online as a follow-up to the bid meeting.
+**Deployment:** Hosted URL (Railway from GitHub), potentially at `briefing.taskforceprotectiongov.com`
 
 ---
 
@@ -25,20 +24,23 @@ APEX-BRIEFING/
 ├── index.html              (HTML structure — built by ChatGPT)
 ├── style.css               (All styling — built by ChatGPT)
 ├── script.js               (Timeline logic — built by ChatGPT)
-├── assets/
-│   ├── audio/
-│   │   └── music.mp3       ("The Mountain" trimmed to 68s, fade baked in)
-│   ├── video/
-│   │   ├── act1-bg.mp4     (World Cup / threat environment)
-│   │   ├── act2-bg.mp4     (Tech / Apex reveal background)
-│   │   ├── act3-v1.mp4     (Capability feature 1 background)
-│   │   ├── act3-v2.mp4     (Capability feature 2 background)
-│   │   ├── act3-v3.mp4     (Capability feature 3 background)
-│   │   ├── act3-v4.mp4     (Capability feature 4 background)
-│   │   ├── act3-v5.mp4     (Capability feature 5 background)
-│   │   ├── act3-v6.mp4     (Capability feature 6 background)
-│   │   ├── act4-bg.mp4     (Deployment / district context)
-│   │   └── act5-bg.mp4     (Closing — dark atmospheric)
+|assets/
+├── video/
+│   ├── scene1-intro.mp4          (5s)
+│   ├── scene2-challenge.mp4      (5s)
+│   ├── scene3-solution.mp4       (5s)
+│   ├── scene4-drone.mp4          (6s)
+│   ├── scene5-command.mp4        (5s)
+│   ├── scene6-coverage.mp4       (5s)
+│   ├── scene7-detection.mp4      (5s)
+│   ├── scene8-scalable.mp4       (5s)
+│   └── scene9-closing.mp4        (7s)
+├── audio/
+│   └── music.mp3                 (your existing track, ~65-70s)
+└── img/
+    ├── tfp-logo.png
+    ├── apex-logo.png
+    └── apex-connex.png           (if still using it)
 │   └── img/
 │       ├── tfp-logo.png    (TFP Spartan helmet lockup)
 │       ├── apex-connex.png (Orange Connex box photo — hero image)
@@ -47,13 +49,9 @@ APEX-BRIEFING/
 └── package.json
 ```
 
-**NOTE:** Video filenames above are placeholders. Brian will provide the actual asset list with final filenames. CC maps them accordingly.
-
----
-
 ## DESIGN SYSTEM
 
-### Colors
+### Colors 
 ```css
 :root {
   --navy: #030d1a;
@@ -81,13 +79,13 @@ APEX-BRIEFING/
 
 ## RUNTIME & TIMING
 
-Total runtime: **68 seconds** (music trimmed with fade baked in starting at ~60s)
+Total runtime: **50-60 seconds** (music trimmed with fade baked in starting at ~52)
 
 ### Start Screen (before timer begins)
 - Black background
-- Apex "Ap" periodic table logo centered, ~120px
-- Text below: `APEX BY SECURE PASSAGE`
-- Subtitle: `DEPLOYED BY TASK FORCE PROTECTION`
+- TFP Logo centered
+- Text below: `TASK FORCE PROTECTION'
+- Subtitle: `DEPLOYING APEX TECHNOLOGY`
 - Pulsing border play button: `▶ CLICK TO BEGIN`
 - On click: start music, hide start screen, begin Act 1 at t=0
 
@@ -95,8 +93,8 @@ Total runtime: **68 seconds** (music trimmed with fade baked in starting at ~60s
 
 | Act | Time | Duration | Content |
 |-----|------|----------|---------|
-| **1 — The Threat** | 0:00–0:08 | 8s | World Cup context, why this matters |
-| **2 — The Solution** | 0:08–0:20 | 12s | Apex Box reveal, hero image, tagline |
+| **1 — APEX at the World Cup** | 0:00–0:06 | 6s | World Cup context, why this matters |
+| **2 — The Challenge** | 0:06–0:20 | 12s | Apex Box reveal, hero image, tagline |
 | **3 — Capabilities** | 0:20–0:42 | 22s | 6 tech features, ~3.5s each |
 | **4 — The Deployment** | 0:42–0:55 | 13s | P&L District specific application |
 | **5 — Close** | 0:55–0:68 | 13s | Logos, contact, fade to black |
