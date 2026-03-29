@@ -1,477 +1,277 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>TFP Briefing • Apex Drone Technology</title>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow+Condensed:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    :root {
-      --bg: #040a12;
-      --navy: #07111f;
-      --gold: #c9a84c;
-      --white: #f4f6f8;
-    }
-    * { box-sizing: border-box; }
-    html, body { margin: 0; height: 100%; background: #000; overflow: hidden; }
-    body {
-      font-family: 'Barlow Condensed', sans-serif;
-      color: var(--white);
-      background: radial-gradient(circle at 50% 30%, rgba(201,168,76,.07), transparent 35%), linear-gradient(180deg, #07111f 0%, #040a12 55%, #000 100%);
-    }
-
-    /* UI overlays */
-    .chrome, .scanlines, .vignette, .hud { position: fixed; inset: 0; pointer-events: none; }
-    .scanlines { background: repeating-linear-gradient(180deg, rgba(255,255,255,.025) 0px, rgba(255,255,255,.025) 1px, transparent 1px, transparent 4px); mix-blend-mode: soft-light; opacity: .35; z-index: 40; }
-    .vignette { background: radial-gradient(circle at center, transparent 48%, rgba(0,0,0,.48) 100%); z-index: 41; }
-    .chrome { z-index: 39; background-image: linear-gradient(90deg, transparent 24px, rgba(255,255,255,.05) 24px, rgba(255,255,255,.05) 25px, transparent 25px), linear-gradient(transparent calc(100%-24px), rgba(255,255,255,.05) calc(100%-24px), rgba(255,255,255,.05) calc(100%-23px), transparent calc(100%-23px)); opacity: .3; }
-    .hud { z-index: 42; }
-    .hud:before, .hud:after { content: ''; position: absolute; top: 22px; width: 130px; height: 130px; border-top: 1px solid rgba(201,168,76,.65); opacity: .8; }
-    .hud:before { left: 22px; border-left: 1px solid rgba(201,168,76,.65); }
-    .hud:after { right: 22px; border-right: 1px solid rgba(201,168,76,.65); }
-
-    .utility { position: fixed; left: 30px; right: 30px; top: 22px; z-index: 50; display: flex; justify-content: space-between; align-items: center; letter-spacing: .25em; font-size: 12px; text-transform: uppercase; color: rgba(255,255,255,.72); }
-    .utility .left, .utility .right { display: flex; gap: 14px; align-items: center; }
-    .utility .tag { color: var(--gold); }
-    .utility .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); box-shadow: 0 0 10px var(--gold); }
-
-    .progress-wrap { position: fixed; left: 30px; right: 30px; bottom: 28px; z-index: 50; display: grid; grid-template-columns: 1fr auto; gap: 14px; align-items: center; }
-    .progress-track { height: 4px; background: rgba(255,255,255,.1); border: 1px solid rgba(255,255,255,.08); overflow: hidden; position: relative; }
-    .progress-bar { position: absolute; inset: 0 auto 0 0; width: 0%; background: linear-gradient(90deg, rgba(201,168,76,.65), var(--gold)); box-shadow: 0 0 18px rgba(201,168,76,.35); }
-    .time-readout { font-size: 12px; letter-spacing: .22em; color: rgba(255,255,255,.72); min-width: 82px; text-align: right; }
-
-    /* Start Screen */
-    #start { position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; background: radial-gradient(circle at center, rgba(201,168,76,.08), transparent 35%), linear-gradient(180deg, rgba(2,6,12,.98), rgba(0,0,0,.98)); }
-    .start-panel { width: min(92vw, 760px); border: 1px solid rgba(255,255,255,.12); background: linear-gradient(180deg, rgba(255,255,255,.045), rgba(255,255,255,.018)); box-shadow: 0 20px 80px rgba(0,0,0,.55), inset 0 1px 0 rgba(255,255,255,.06); padding: 42px 34px; text-align: center; position: relative; overflow: hidden; }
-    .start-panel:before { content: ''; position: absolute; inset: 0; background: linear-gradient(120deg, transparent 0%, rgba(201,168,76,.09) 50%, transparent 100%); transform: translateX(-100%); animation: sheen 3.8s linear infinite; }
-    @keyframes sheen { to { transform: translateX(100%); } }
-    .start-logo { width: min(220px, 45vw); filter: drop-shadow(0 8px 18px rgba(0,0,0,.45)); }
-    .eyebrow { margin-top: 18px; color: var(--gold); letter-spacing: .35em; font-size: 13px; text-transform: uppercase; }
-    .title { font-family: 'Bebas Neue', sans-serif; font-size: clamp(46px, 8vw, 92px); line-height: .95; letter-spacing: .06em; margin: 10px 0 6px; }
-    .subtitle { margin: 0 auto; max-width: 620px; font-size: clamp(17px, 2vw, 22px); line-height: 1.35; color: rgba(255,255,255,.8); }
-    .start-actions { margin-top: 28px; display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; }
-    .play-btn { appearance: none; border: 1px solid rgba(201,168,76,.8); background: rgba(201,168,76,.08); color: var(--gold); padding: 14px 28px; font: 600 16px/1 'Barlow Condensed', sans-serif; letter-spacing: .28em; text-transform: uppercase; cursor: pointer; transition: all .2s ease; box-shadow: 0 0 0 rgba(201,168,76,0); animation: pulse 2s ease-in-out infinite; }
-    .play-btn:hover { transform: translateY(-2px); background: rgba(201,168,76,.18); }
-    @keyframes pulse { 50% { box-shadow: 0 0 28px rgba(201,168,76,.28); } }
-
-    /* Presentation */
-    #presentation { position: fixed; inset: 0; }
-    .scene { position: absolute; inset: 0; opacity: 0; visibility: hidden; pointer-events: none; transition: opacity .5s ease, visibility .5s ease; }
-    .scene.active { opacity: 1; visibility: visible; }
-    .bg { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; opacity: .38; filter: saturate(.9) contrast(1.08) brightness(.82); } /* Better visibility */
-    .scrim { position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,.58), rgba(0,0,0,.4) 25%, rgba(0,0,0,.55) 100%), linear-gradient(90deg, rgba(3,13,26,.68), rgba(3,13,26,.22) 45%, rgba(3,13,26,.72)); }
-
-    .content { 
-      position: relative; z-index: 2; 
-      width: min(1060px, calc(100vw - 180px)); /* Tighter, centered */
-      height: 100%; 
-      margin: 0 auto; 
-      padding: 90px 50px; 
-      display: grid; 
-      align-items: center; 
-    }
-
-    .center-stack { text-align: center; }
-    .line { width: 110px; height: 2px; background: linear-gradient(90deg, transparent, var(--gold), transparent); margin: 16px auto 20px; transform: scaleX(.3); opacity: 0; transition: .8s ease; }
-    .active .line { transform: scaleX(1); opacity: 1; }
-    .headline { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; font-size: clamp(46px, 7vw, 78px); line-height: .96; letter-spacing: .05em; margin: 0; opacity: 0; transform: translateY(30px); transition: .8s ease .1s; }
-    .active .headline { opacity: 1; transform: translateY(0); }
-    .kicker { color: var(--gold); text-transform: uppercase; letter-spacing: .32em; font-size: 13.5px; margin-bottom: 12px; opacity: 0; transform: translateY(20px); transition: .8s ease; }
-    .active .kicker { opacity: 1; transform: translateY(0); }
-    .deck-copy { max-width: 680px; margin: 0 auto; font-size: clamp(18px, 2.1vw, 23px); line-height: 1.42; color: rgba(255,255,255,.88); opacity: 0; transform: translateY(25px); transition: .8s ease .2s; }
-    .active .deck-copy { opacity: 1; transform: translateY(0); }
-
-    .cap-grid { display: grid; grid-template-columns: 1.05fr .95fr; gap: 65px; align-items: center; }
-    .cap-num { font-family: 'Bebas Neue', sans-serif; font-size: clamp(68px, 13vw, 155px); line-height: .8; color: rgba(201,168,76,.18); position: absolute; top: 80px; left: 65px; pointer-events: none; z-index: 1; }
-    .cap-title { font-family: 'Bebas Neue', sans-serif; text-transform: uppercase; letter-spacing: .05em; font-size: clamp(40px, 5.5vw, 68px); line-height: .93; margin: 0; opacity: 0; transform: translateY(30px); transition: .8s ease .1s; }
-    .scene.active .cap-title { opacity: 1; transform: translateY(0); }
-    .cap-desc { font-size: clamp(18px, 2vw, 23px); color: rgba(255,255,255,.87); max-width: 600px; margin-top: 20px; opacity: 0; transform: translateY(25px); transition: .8s ease .25s; }
-    .scene.active .cap-desc { opacity: 1; transform: translateY(0); }
-    .cap-panel { justify-self: end; width: min(370px, 37vw); padding: 26px; border: 1px solid rgba(255,255,255,.12); background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.02)); box-shadow: 0 20px 60px rgba(0,0,0,.4); opacity: 0; transform: translateX(30px); transition: .9s ease .25s; }
-    .scene.active .cap-panel { opacity: 1; transform: translateX(0); }
-    .cap-panel .meta { display: flex; justify-content: space-between; font-size: 12.5px; letter-spacing: .22em; text-transform: uppercase; color: rgba(255,255,255,.75); }
-    .cap-panel .meta span:last-child { color: var(--gold); }
-    .cap-panel .bar { height: 2px; background: linear-gradient(90deg, var(--gold), transparent); margin: 18px 0 20px; }
-    .cap-panel ul { list-style: none; padding: 0; margin: 0; display: grid; gap: 11px; }
-    .cap-panel li { font-size: 17px; color: rgba(255,255,255,.88); display: flex; gap: 10px; align-items: start; }
-    .cap-panel li::before { content: '▸'; color: var(--gold); }
-
-    /* Apex scene */
-    .apex-layout { display: grid; grid-template-columns: minmax(300px, .7fr) minmax(380px, 1.3fr); gap: 55px; align-items: center; }
-    .apex-tile { width: min(280px, 32vw); opacity: 0; transform: translateY(25px) scale(.95); transition: .9s ease .2s; }
-    .scene.active .apex-tile { opacity: 1; transform: translateY(0) scale(1); }
-    .apex-box { position: relative; min-height: 420px; display: grid; place-items: center; }
-    .apex-box img.connex { width: min(760px, 57vw); max-height: 57vh; object-fit: contain; opacity: 0; transform: translateY(30px) scale(.97); transition: 1.1s ease .15s; filter: drop-shadow(0 30px 65px rgba(0,0,0,.5)); }
-    .scene.active .apex-box img.connex { opacity: 1; transform: translateY(0) scale(1); }
-    .ring { position: absolute; width: min(660px, 55vw); aspect-ratio: 1; border-radius: 50%; border: 1px solid rgba(201,168,76,.24); box-shadow: inset 0 0 45px rgba(201,168,76,.06); animation: rotate 17s linear infinite; }
-    .ring.r2 { width: min(780px, 64vw); animation-direction: reverse; animation-duration: 23s; opacity: .52; }
-    .ring.r3 { width: min(520px, 43vw); border-style: dashed; animation-duration: 13s; opacity: .42; }
-    @keyframes rotate { to { transform: rotate(360deg); } }
-    .apex-copy { position: absolute; left: 45px; bottom: 38px; z-index: 3; width: min(390px, 39vw); padding: 22px 22px 18px; background: linear-gradient(180deg, rgba(3,13,26,.8), rgba(3,13,26,.55)); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 20px 55px rgba(0,0,0,.35); opacity: 0; transform: translateY(25px); transition: .9s ease .45s; }
-    .scene.active .apex-copy { opacity: 1; transform: translateY(0); }
-    .apex-copy .hdr { font-size: 12.5px; letter-spacing: .28em; color: var(--gold); text-transform: uppercase; }
-    .apex-copy strong { font-family: 'Bebas Neue', sans-serif; font-size: clamp(27px, 3.4vw, 44px); letter-spacing: .04em; line-height: .95; }
-    .feature-grid { display: grid; grid-template-columns: repeat(2, minmax(0,1fr)); gap: 14px 18px; margin-top: 14px; }
-    .feature { padding-top: 13px; border-top: 1px solid rgba(255,255,255,.09); font-size: 16.5px; line-height: 1.32; color: rgba(255,255,255,.89); opacity: 0; transform: translateY(15px); }
-    .scene.active .feature { animation: featureIn .65s ease forwards; }
-    .scene.active .feature:nth-child(1) { animation-delay: .5s; }
-    .scene.active .feature:nth-child(2) { animation-delay: .68s; }
-    .scene.active .feature:nth-child(3) { animation-delay: .86s; }
-    .scene.active .feature:nth-child(4) { animation-delay: 1.04s; }
-    .scene.active .feature:nth-child(5) { animation-delay: 1.22s; }
-    .scene.active .feature:nth-child(6) { animation-delay: 1.4s; }
-    @keyframes featureIn { to { opacity: 1; transform: translateY(0); } }
-
-    .closing { text-align: center; display: grid; justify-items: center; gap: 12px; }
-    .closing .contact { font-size: clamp(21px, 2.3vw, 29px); letter-spacing: .08em; color: rgba(255,255,255,.85); opacity: 0; transform: translateY(25px); transition: .8s ease .3s; }
-    .scene.active .closing .contact { opacity: 1; transform: translateY(0); }
-    .closing .url { color: var(--gold); }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TFP • APEX Briefing | World Cup 2026</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@400;600&display=swap');
+        
+        :root {
+            --navy: #0a1428;
+            --gold: #d4af37;
+            --red: #c8102e;
+        }
+        
+        * { margin:0; padding:0; box-sizing:border-box; }
+        body {
+            background: #000;
+            color: white;
+            font-family: 'Barlow', sans-serif;
+            overflow: hidden;
+            height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        #container {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            max-width: 1920px;
+            max-height: 1080px;
+            margin: 0 auto;
+            background: #000;
+            overflow: hidden;
+        }
+        
+        #bg-video {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.65;
+            filter: brightness(0.85) contrast(1.1);
+        }
+        
+        .overlay {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            pointer-events: none;
+            background: radial-gradient(circle at center, transparent 40%, rgba(10,20,40,0.7) 100%);
+            z-index: 2;
+        }
+        
+        .scanline {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(255,255,255,0.03) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
+            animation: scan 4s linear infinite;
+            z-index: 3;
+        }
+        
+        @keyframes scan { 0% { transform: translateY(-100%); } 100% { transform: translateY(100%); } }
+        
+        .content {
+            position: absolute;
+            top: 50%; left: 50%;
+            transform: translate(-50%, -50%);
+            width: min(1060px, 85vw);
+            z-index: 10;
+            text-align: center;
+            pointer-events: none;
+        }
+        
+        .card {
+            background: rgba(10,20,40,0.85);
+            border: 2px solid var(--gold);
+            padding: 40px 60px;
+            border-radius: 8px;
+            box-shadow: 0 0 40px rgba(212,175,55,0.3);
+            opacity: 0;
+            transition: opacity 0.6s ease;
+        }
+        
+        .card.active { opacity: 1; }
+        
+        h1 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: clamp(2.8rem, 6vw, 4.5rem);
+            color: var(--gold);
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+        }
+        
+        p {
+            font-size: 1.35rem;
+            line-height: 1.5;
+            max-width: 820px;
+            margin: 0 auto;
+        }
+        
+        .progress-bar {
+            position: absolute;
+            bottom: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(to right, var(--red), var(--gold));
+            z-index: 20;
+            transition: width 0.1s linear;
+        }
+        
+        #start-screen {
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(10,20,40,0.95);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-direction: column;
+            z-index: 100;
+            transition: opacity 1s ease;
+        }
+        
+        #start-btn {
+            padding: 18px 60px;
+            font-size: 1.8rem;
+            background: var(--red);
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: 'Bebas Neue', sans-serif;
+            letter-spacing: 3px;
+            transition: all 0.3s;
+        }
+        
+        #start-btn:hover {
+            background: var(--gold);
+            color: #000;
+            transform: scale(1.05);
+        }
+        
+        .logo {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 3.5rem;
+            color: var(--gold);
+            margin-bottom: 40px;
+            letter-spacing: 6px;
+        }
+    </style>
 </head>
 <body>
-  <div class="chrome"></div>
-  <div class="scanlines"></div>
-  <div class="vignette"></div>
-  <div class="hud"></div>
-
-  <div class="utility">
-    <div class="left"><span class="dot"></span><span>Task Force Protection LLC</span></div>
-    <div class="right"><span class="tag" id="actLabel">Capabilities Briefing</span><span id="sceneLabel">Standby</span></div>
-  </div>
-
-  <div id="start">
-    <div class="start-panel">
-      <img class="start-logo" src="./assets/img/tfp-logo.png" alt="TFP logo">
-      <div class="eyebrow">Executive Brief</div>
-      <h1 class="title">Task Force Protection</h1>
-      <p class="subtitle">Security Infrastructure for High-Consequence Environments</p>
-      <div class="start-actions">
-        <button class="play-btn" id="playBtn">▶ Click to Begin</button>
-        <div class="f11-note">F11 for Fullscreen</div>
-      </div>
-    </div>
-  </div>
-
-  <audio id="music" preload="auto" src="./assets/audio/music.mp3"></audio>
-
-  <main id="presentation">
-    <!-- Intro -->
-    <section class="scene active" id="scene-intro" data-label="Identity">
-      <video class="bg" muted playsinline loop preload="auto" src="./assets/video/act1-bg.mp4"></video>
-      <div class="scrim"></div>
-      <div class="content center-stack">
-        <div class="kicker">Task Force Protection LLC</div>
-        <img class="logo-mark" src="./assets/img/tfp-logo.png" alt="TFP logo">
-        <div class="line"></div>
-        <h2 class="headline">Premier Private Security</h2>
-        <p class="deck-copy">Service-disabled veteran-owned. High-trust protection, response, and command capability for high-visibility environments.</p>
-      </div>
-    </section>
-
-    <!-- Capability scenes using your exact act3-v* files -->
-    <section class="scene" id="scene-cap1" data-label="Capability 01">
-      <video class="bg" muted playsinline loop preload="auto" src="./assets/video/act3-v1.mp4"></video>
-      <div class="scrim"></div>
-      <div class="cap-num">01</div>
-      <div class="content cap-grid">
-        <div class="cap-copy">
-          <div class="kicker">Operational Capability</div>
-          <h2 class="cap-title">Aerial Drone Surveillance</h2>
-          <div class="line"></div>
-          <p class="cap-desc">Real-time overhead monitoring for venues, events, and district perimeters.</p>
+    <div id="container">
+        <video id="bg-video" muted loop playsinline></video>
+        <div class="overlay"></div>
+        <div class="scanline"></div>
+        
+        <!-- Start Screen -->
+        <div id="start-screen">
+            <div class="logo">TASK FORCE PROTECTION</div>
+            <h1 style="color:#fff; font-size:2.8rem; margin-bottom:20px;">APEX DRONE TECHNOLOGY</h1>
+            <p style="font-size:1.4rem; max-width:600px; margin-bottom:50px;">Power & Light District • 2026 FIFA World Cup</p>
+            <button id="start-btn">CLICK TO BEGIN BRIEFING</button>
         </div>
-        <div class="cap-panel">
-          <div class="meta"><span>Live Overwatch</span><span>Air Layer</span></div>
-          <div class="bar"></div>
-          <ul>
-            <li>Wide-area visual coverage</li>
-            <li>Rapid incident cueing</li>
-            <li>Perimeter and crowd visibility</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="scene" id="scene-cap2" data-label="Capability 02">
-      <video class="bg" muted playsinline loop preload="auto" src="./assets/video/act3-v2.mp4"></video>
-      <div class="scrim"></div>
-      <div class="cap-num">02</div>
-      <div class="content cap-grid">
-        <div class="cap-copy">
-          <div class="kicker">Operational Capability</div>
-          <h2 class="cap-title">AI-Powered Threat Detection</h2>
-          <div class="line"></div>
-          <p class="cap-desc">Instant identification of anomalies from above.</p>
-        </div>
-        <div class="cap-panel">
-          <div class="meta"><span>Threat Posture</span><span>AI Layer</span></div>
-          <div class="bar"></div>
-          <ul>
-            <li>Behavior analysis</li>
-            <li>Gunshot detection</li>
-            <li>Crowd tracking</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="scene" id="scene-cap3" data-label="Capability 03">
-      <video class="bg" muted playsinline loop preload="auto" src="./assets/video/act3-v3.mp4"></video>
-      <div class="scrim"></div>
-      <div class="cap-num">03</div>
-      <div class="content cap-grid">
-        <div class="cap-copy">
-          <div class="kicker">Operational Capability</div>
-          <h2 class="cap-title">Real-Time Sensor Fusion</h2>
-          <div class="line"></div>
-          <p class="cap-desc">All sensors combined into a single operational picture.</p>
-        </div>
-        <div class="cap-panel">
-          <div class="meta"><span>Command + Control</span><span>Sensor Layer</span></div>
-          <div class="bar"></div>
-          <ul>
-            <li>Thermal &amp; night vision</li>
-            <li>License plate recognition</li>
-            <li>360° persistent coverage</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="scene" id="scene-cap4" data-label="Capability 04">
-      <video class="bg" muted playsinline loop preload="auto" src="./assets/video/act3-v4.mp4"></video>
-      <div class="scrim"></div>
-      <div class="cap-num">04</div>
-      <div class="content cap-grid">
-        <div class="cap-copy">
-          <div class="kicker">Operational Capability</div>
-          <h2 class="cap-title">Mobile Command Center</h2>
-          <div class="line"></div>
-          <p class="cap-desc">On-site coordination hub for real-time situational awareness.</p>
-        </div>
-        <div class="cap-panel">
-          <div class="meta"><span>Command + Control</span><span>Real Time</span></div>
-          <div class="bar"></div>
-          <ul>
-            <li>Single operational picture</li>
-            <li>Cross-team coordination</li>
-            <li>Decision support</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="scene" id="scene-cap5" data-label="Capability 05">
-      <video class="bg" muted playsinline loop preload="auto" src="./assets/video/act3-v5.mp4"></video>
-      <div class="scrim"></div>
-      <div class="cap-num">05</div>
-      <div class="content cap-grid">
-        <div class="cap-copy">
-          <div class="kicker">Operational Capability</div>
-          <h2 class="cap-title">Armed Ground Teams</h2>
-          <div class="line"></div>
-          <p class="cap-desc">Uniformed and plainclothes personnel drawn from former military and law enforcement backgrounds.</p>
-        </div>
-        <div class="cap-panel">
-          <div class="meta"><span>Visible + Covert</span><span>Ground Layer</span></div>
-          <div class="bar"></div>
-          <ul>
-            <li>Uniformed deterrence presence</li>
-            <li>Plainclothes protective coverage</li>
-            <li>District-wide deployment flexibility</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <section class="scene" id="scene-cap6" data-label="Capability 06">
-      <video class="bg" muted playsinline loop preload="auto" src="./assets/video/act3-v6.mp4"></video>
-      <div class="scrim"></div>
-      <div class="cap-num">06</div>
-      <div class="content cap-grid">
-        <div class="cap-copy">
-          <div class="kicker">Operational Capability</div>
-          <h2 class="cap-title">Medical Trauma Response</h2>
-          <div class="line"></div>
-          <p class="cap-desc">Stop the Bleed-certified emergency first response before EMS arrival.</p>
-        </div>
-        <div class="cap-panel">
-          <div class="meta"><span>Life Safety</span><span>Response Layer</span></div>
-          <div class="bar"></div>
-          <ul>
-            <li>Immediate casualty intervention</li>
-            <li>Preparedness for high-risk environments</li>
-            <li>Integrated into broader protection posture</li>
-          </ul>
-        </div>
-      </div>
-    </section>
-
-    <!-- Proof -->
-    <section class="scene" id="scene-proof" data-label="Proof Points">
-      <video class="bg" muted playsinline loop preload="auto" src="./assets/video/act3-bg.mp4"></video>
-      <div class="scrim"></div>
-      <div class="content proof-shell">
-        <div class="proof-left">
-          <div class="kicker">Select Engagements + Credentials</div>
-          <h2 class="headline">Proof of Capability</h2>
-          <div class="line"></div>
-          <p class="deck-copy">Positioning built around executive protection, dignitary support, production security, and operational credibility.</p>
-        </div>
-        <div class="proof-card">
-          <div class="meta"><span>Field Reference</span><span class="gold">Validated</span></div>
-          <div class="proof-list">
-            <div class="proof-item"><h3>Patrick Mahomes</h3><p>Kansas City Chiefs — NFL MVP &amp; Super Bowl Champion · ongoing executive protection.</p></div>
-            <div class="proof-item"><h3>Diplomatic Security</h3><p>International dignitary protection for foreign diplomatic personnel operating within the United States.</p></div>
-            <div class="proof-item"><h3>Film &amp; Production Security</h3><p>Set security and talent protection across Kansas City productions.</p></div>
-            <div class="proof-item"><h3>Credentials</h3><p>Federal Protective Services standard exceeded · KCPD range qualified · special operations personnel · SDVOSB.</p></div>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Apex -->
-    <section class="scene" id="scene-apex" data-label="Integrated Technology">
-      <video class="bg" muted playsinline loop preload="auto" src="./assets/video/act4-bg.mp4"></video>
-      <div class="scrim"></div>
-      <div class="content apex-layout">
-        <div>
-          <div class="kicker">Integrated Technology</div>
-          <img class="apex-tile" src="./assets/img/apex-logo.png" alt="Apex logo tile">
-        </div>
-        <div class="apex-box">
-          <div class="ring r1"></div>
-          <div class="ring r2"></div>
-          <div class="ring r3"></div>
-          <img class="connex" src="./assets/img/apex-connex.png" alt="Apex conex box">
-          <div class="apex-copy">
-            <div class="hdr">Apex / Secure Passage</div>
-            <strong>Deploy Anywhere. Defend Everywhere.</strong>
-            <div class="feature-grid">
-              <div class="feature">Gunshot detection &amp; behavior analysis</div>
-              <div class="feature">Thermal &amp; night vision surveillance</div>
-              <div class="feature">License plate recognition &amp; crowd tracking</div>
-              <div class="feature">Autonomous drone surveillance</div>
-              <div class="feature">Truman PDR &amp; Hx OIC integration</div>
-              <div class="feature">Powered by Secure Passage</div>
+        
+        <!-- Main Content -->
+        <div class="content">
+            <div id="card" class="card">
+                <h1 id="headline"></h1>
+                <p id="body"></p>
             </div>
-          </div>
         </div>
-      </div>
-    </section>
+        
+        <div class="progress-bar" id="progress"></div>
+    </div>
 
-    <!-- Close -->
-    <section class="scene" id="scene-close" data-label="Closing">
-      <video class="bg" muted playsinline loop preload="auto" src="./assets/video/act5-bg.mp4"></video>
-      <div class="scrim"></div>
-      <div class="content closing">
-        <div class="kicker">Task Force Protection LLC</div>
-        <img class="logo-mark" src="./assets/img/tfp-logo.png" alt="TFP logo">
-        <div class="line"></div>
-        <h2 class="headline">Protection at Executive Level</h2>
-        <div class="contact">(660) 227-9063</div>
-        <div class="contact url">taskforceprotectiongov.com</div>
-      </div>
-    </section>
-  </main>
+    <audio id="music" src="./assets/audio/music.mp3"></audio>
 
-  <div class="progress-wrap">
-    <div class="progress-track"><div class="progress-bar" id="progressBar"></div></div>
-    <div class="time-readout" id="timeReadout">00:00 / 01:05</div>
-  </div>
-
-  <script>
-    const DURATION = 65;
-    const music = document.getElementById('music');
-    const playBtn = document.getElementById('playBtn');
-    const startScreen = document.getElementById('start');
-    const progressBar = document.getElementById('progressBar');
-    const timeReadout = document.getElementById('timeReadout');
-    const actLabel = document.getElementById('actLabel');
-    const sceneLabel = document.getElementById('sceneLabel');
-
-    const scenes = [
-      {id: 'scene-intro', start: 0, end: 5, act: 'Identity', label: 'Brand Presence'},
-      {id: 'scene-cap1', start: 5, end: 11, act: 'Capabilities', label: 'Aerial Drone Surveillance'},
-      {id: 'scene-cap2', start: 11, end: 17, act: 'Capabilities', label: 'AI-Powered Threat Detection'},
-      {id: 'scene-cap3', start: 17, end: 23, act: 'Capabilities', label: 'Real-Time Sensor Fusion'},
-      {id: 'scene-cap4', start: 23, end: 29, act: 'Capabilities', label: 'Mobile Command Center'},
-      {id: 'scene-cap5', start: 29, end: 35, act: 'Capabilities', label: 'Armed Ground Teams'},
-      {id: 'scene-cap6', start: 35, end: 41, act: 'Capabilities', label: 'Medical Trauma Response'},
-      {id: 'scene-proof', start: 41, end: 49, act: 'Proof Points', label: 'Selected Engagements'},
-      {id: 'scene-apex', start: 49, end: 57, act: 'Integrated Technology', label: 'Apex'},
-      {id: 'scene-close', start: 57, end: 65, act: 'Closing', label: 'Contact'}
-    ];
-
-    const videos = [...document.querySelectorAll('video.bg')];
-    let rafId = null;
-
-    const formatTime = (s) => {
-      const m = String(Math.floor(s / 60)).padStart(2, '0');
-      const sec = String(Math.floor(s % 60)).padStart(2, '0');
-      return `${m}:${sec}`;
-    };
-
-    function setScene(id) {
-      document.querySelectorAll('.scene').forEach(s => s.classList.toggle('active', s.id === id));
-      const meta = scenes.find(s => s.id === id);
-      if (meta) {
-        actLabel.textContent = meta.act;
-        sceneLabel.textContent = meta.label;
-      }
-    }
-
-    function updateVideos(t) {
-      videos.forEach(v => {
-        const parent = v.closest('.scene');
-        const meta = scenes.find(s => s.id === parent.id);
-        if (!meta) return;
-        if (t >= meta.start && t < meta.end) {
-          if (v.paused) v.play().catch(() => {});
-        } else if (!v.paused) v.pause();
-      });
-    }
-
-    function tick() {
-      const t = Math.min(music.currentTime || 0, DURATION);
-      const current = scenes.find(s => t >= s.start && t < s.end) || scenes[scenes.length - 1];
-      setScene(current.id);
-      updateVideos(t);
-      progressBar.style.width = `${(t / DURATION) * 100}%`;
-      timeReadout.textContent = `${formatTime(t)} / 01:05`;
-
-      if (t >= 61.5) music.volume = Math.max(0, 1 - ((t - 61.5) / 3.5));
-
-      if (t >= DURATION || music.ended) {
-        cancelAnimationFrame(rafId);
-        return;
-      }
-      rafId = requestAnimationFrame(tick);
-    }
-
-    // FIXED START BUTTON
-    playBtn.addEventListener('click', async () => {
-      console.log("Start button clicked");
-      startScreen.style.opacity = '0';
-      setTimeout(() => {
-        startScreen.style.display = 'none';
-      }, 800);
-
-      music.volume = 1.0;
-      try {
-        await music.play();
-        console.log("Music started successfully");
-      } catch (e) {
-        console.error("Music play failed:", e);
-      }
-
-      videos.forEach(v => v.load());
-      tick();
-    });
-
-    console.log("Presentation loaded - click Start to begin");
-  </script>
+    <script>
+        const video = document.getElementById('bg-video');
+        const music = document.getElementById('music');
+        const startScreen = document.getElementById('start-screen');
+        const headlineEl = document.getElementById('headline');
+        const bodyEl = document.getElementById('body');
+        const progressBar = document.getElementById('progress');
+        
+        const DURATION = 65;
+        
+        const scenes = [
+            { start: 0,   end: 6,  file: "./assets/video/scene1-intro.mp4",      headline: "APEX at the World Cup", 
+              body: "Task Force Protection secures Kansas City's Power & Light District with advanced Apex drone technology for the 2026 FIFA World Cup." },
+            { start: 6,   end: 13, file: "./assets/video/scene2-challenge.mp4",   headline: "The Challenge", 
+              body: "Large-scale events create dynamic, high-density environments that demand real-time situational awareness beyond traditional methods." },
+            { start: 13,  end: 20, file: "./assets/video/scene3-solution.mp4",    headline: "Our Solution", 
+              body: "Apex delivers a mobile, rapidly deployable command platform integrated with intelligent drone networks for comprehensive coverage." },
+            { start: 20,  end: 28, file: "./assets/video/scene4-drone.mp4",       headline: "Real-Time Drone Network", 
+              body: "Autonomous Apex drones provide persistent aerial oversight with precision gimbal imaging and seamless live feeds." },
+            { start: 28,  end: 35, file: "./assets/video/scene5-command.mp4",     headline: "Centralized Command", 
+              body: "Unified operations center fuses drone telemetry, sensor data, and ground assets into actionable intelligence." },
+            { start: 35,  end: 43, file: "./assets/video/scene6-coverage.mp4",    headline: "Intelligent Coverage", 
+              body: "Multi-layered sensing delivers clear visibility across crowded urban zones, day or night." },
+            { start: 43,  end: 50, file: "./assets/video/scene7-detection.mp4",   headline: "Advanced Detection", 
+              body: "High-precision systems identify and track potential risks with speed and accuracy." },
+            { start: 50,  end: 57, file: "./assets/video/scene8-scalable.mp4",    headline: "Scalable & Reliable", 
+              body: "Proven drone fleet architecture scales effortlessly while maintaining continuous, organized patrol patterns." },
+            { start: 57,  end: 65, file: "./assets/video/scene9-closing.mp4",     headline: "Securing the Future", 
+              body: "Task Force Protection + Apex technology ensures safe, world-class experiences in the Power & Light District." }
+        ];
+        
+        let currentSceneIndex = -1;
+        let rafId = null;
+        
+        function loadVideo(src) {
+            video.src = src;
+            video.load();
+            video.play().catch(e => console.log("Video play error:", e));
+        }
+        
+        function updateScene(time) {
+            for (let i = 0; i < scenes.length; i++) {
+                if (time >= scenes[i].start && time < scenes[i].end) {
+                    if (i !== currentSceneIndex) {
+                        currentSceneIndex = i;
+                        loadVideo(scenes[i].file);
+                        headlineEl.textContent = scenes[i].headline;
+                        bodyEl.textContent = scenes[i].body;
+                        document.getElementById('card').classList.add('active');
+                    }
+                    return;
+                }
+            }
+        }
+        
+        function tick() {
+            const currentTime = music.currentTime || 0;
+            const progress = Math.min((currentTime / DURATION) * 100, 100);
+            progressBar.style.width = `${progress}%`;
+            
+            updateScene(currentTime);
+            
+            if (currentTime < DURATION) {
+                rafId = requestAnimationFrame(tick);
+            }
+        }
+        
+        // Start Button
+        document.getElementById('start-btn').addEventListener('click', async () => {
+            startScreen.style.opacity = '0';
+            setTimeout(() => { startScreen.style.display = 'none'; }, 1000);
+            
+            // Start music and video
+            try {
+                await music.play();
+                loadVideo(scenes[0].file);
+                tick();
+            } catch (e) {
+                console.error("Playback error:", e);
+            }
+        });
+        
+        // Keyboard support (Space to restart for testing)
+        document.addEventListener('keydown', (e) => {
+            if (e.key === " " && music.paused) {
+                music.currentTime = 0;
+                startScreen.style.display = 'flex';
+                startScreen.style.opacity = '1';
+            }
+        });
+        
+        console.log("✅ TFP APEX Briefing loaded. Click 'CLICK TO BEGIN BRIEFING' to start.");
+    </script>
 </body>
 </html>
